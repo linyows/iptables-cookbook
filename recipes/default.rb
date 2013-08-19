@@ -15,9 +15,12 @@ iptable_rules_path = case node['platform_family']
 
 template 'iptables_conf' do
   conf = node['iptables'][node.name] || node['iptables']['conf']
-  conf.gsub!(/^ {2,}/, '')
-  conf.strip!
-  conf = conf.split("\n") if conf.is_a?(String)
+
+  if conf.is_a?(String)
+    conf.gsub!(/^ {2,}/, '')
+    conf.strip!
+    conf = conf.split("\n")
+  end
 
   source 'iptables_conf.erb'
   path iptable_rules_path
